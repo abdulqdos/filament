@@ -24,16 +24,30 @@ class ConferenceResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('name')
+                    ->helperText('The Name Of THe conference')
+                    ->maxLength(60)
+                    ->default('My Conference')
                     ->required(),
-                Forms\Components\TextInput::make('description')
+                Forms\Components\RichEditor::make('description')
+                    ->disableToolbarButtons(['italic' , 'underline'])
+                    ->helperText('This is description')
                     ->required(),
                 Forms\Components\DateTimePicker::make('start_date')
+                    ->native(false)
                     ->required(),
                 Forms\Components\DateTimePicker::make('end_date')
                     ->required(),
-                Forms\Components\TextInput::make('status')
+                Forms\Components\Select::make('status')
+                    ->options([
+                        'draft' => 'Draft',
+                        'published' => 'Published',
+                        'rejected' => 'Rejected',
+                    ])
                     ->required(),
                 Forms\Components\TextInput::make('region')
+                    ->required(),
+                Forms\Components\Toggle::make('is_published')
+                    ->default(true)
                     ->required(),
                 Forms\Components\Select::make('venue_id')
                     ->relationship('venue', 'name'),
