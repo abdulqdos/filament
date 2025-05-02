@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Region;
 use App\Filament\Resources\ConferenceResource\Pages;
 use App\Filament\Resources\ConferenceResource\RelationManagers;
 use App\Models\Conference;
@@ -44,8 +45,9 @@ class ConferenceResource extends Resource
                         'rejected' => 'Rejected',
                     ])
                     ->required(),
-                Forms\Components\TextInput::make('region')
-                    ->required(),
+                Forms\Components\Select::make('region')
+                    ->enum(Region::class)
+                    ->options(Region::class),
                 Forms\Components\Toggle::make('is_published')
                     ->default(true)
                     ->required(),

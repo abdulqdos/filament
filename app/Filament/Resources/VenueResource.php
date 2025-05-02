@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\Region;
 use App\Filament\Resources\VenueResource\Pages;
 use App\Filament\Resources\VenueResource\RelationManagers;
 use App\Models\Venue;
@@ -31,6 +32,9 @@ class VenueResource extends Resource
                     ->required(),
                 Forms\Components\TextInput::make('postal_code')
                     ->required(),
+                Forms\Components\Select::make('region')
+                    ->enum(Region::class)
+                    ->options(Region::class),
             ]);
     }
 
