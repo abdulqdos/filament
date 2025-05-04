@@ -12,6 +12,7 @@ class Speaker extends Model
 
     protected  $casts = [
             'id' => 'integer',
+            'qualification' => 'array',
         ];
 
     public function conferences(): BelongsToMany
