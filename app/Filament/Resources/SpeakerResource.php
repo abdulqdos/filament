@@ -22,28 +22,7 @@ class SpeakerResource extends Resource
     public static function form(Form $form): Form
     {
         return $form
-            ->schema([
-                Forms\Components\TextInput::make('name')
-                    ->required(),
-                Forms\Components\TextInput::make('email')
-                    ->email()
-                    ->required(),
-                Forms\Components\CheckboxList::make('qualifications')
-                ->options([
-                    'business' => 'Business',
-                    'Coding' => 'Coding',
-                    'first-time' => 'First Time',
-                    'open-source' => 'Open Source',
-                ])->columns(2)
-                    ->descriptions([
-                        'business' => 'Business is this something great',
-                        'Coding' => 'Coding is this something great',
-                        'first-time' => 'First Time is this something great',
-                        'open-source' => 'Open Source is this something great',
-                    ])
-                ->searchable()
-                ->bulkToggleable()
-            ]);
+            ->schema(Speaker::getForm());
     }
 
     public static function table(Table $table): Table

@@ -22,12 +22,19 @@ class ConferenceFactory extends Factory
      */
     public function definition(): array
     {
+        $startDate = now()->addMonth(9);
+        $endDate = now()->addMonth(9)->addDays(2);
+
         return [
             'name' => fake()->name(),
             'description' => fake()->text(),
-            'start_date' => fake()->dateTime(),
-            'end_date' => fake()->dateTime(),
-            'status' => fake()->word(),
+            'start_date' => $startDate,
+            'end_date' => $endDate,
+            'status' => fake()->randomElement([
+                'draft',
+                'published',
+                'rejected',
+            ]),
             'region' => fake()->randomElement(Region::class),
             'venue_id' => Venue::factory(),
         ];

@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email');
+            $table->string('bio');
+            $table->text('avatar')->nullable();
             $table->json('qualifications')->nullable();
             $table->timestamps();
         });

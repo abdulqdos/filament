@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Enums\Region;
+use Filament\Forms\Components\Actions;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Fieldset;
@@ -20,7 +22,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Filament\Forms;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Mail\Markdown;
-
 //use App\Filament\Resources\ConferenceResource\RelationManagers;
 
 class Conference extends Model
@@ -117,6 +118,29 @@ class Conference extends Model
                                 }),
                     ]),
             ]),
+
+
+            Actions::make([
+                Action::make('star')
+                    ->label('Fill with Factory Data')
+                    ->icon('heroicon-m-star')
+                    ->visible(function (string $operation) {
+                        if ($operation !== 'create') {
+                            return false;
+                        }
+
+                        if (!app()->environment('local')) {
+                            return false;
+                        }
+                        return true;
+                    })
+                    ->action(function ($livewire) {
+                        $data = Conference::factory()->make()->toArray();
+                        unset($data['venue_id']); // Better Then Set Null  in Factory
+                        $livewire->form->fill($data );
+                    }),
+            ]),
+
 //            Section::make('Conference Details')
 //                ->collapsible()
 //                ->icon('heroicon-s-calendar')

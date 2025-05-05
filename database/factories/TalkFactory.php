@@ -2,10 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Enums\TalkLength;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Speaker;
 use App\Models\Talk;
+use TalkStatus;
 
 class TalkFactory extends Factory
 {
