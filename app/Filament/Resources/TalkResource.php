@@ -39,6 +39,7 @@ class TalkResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->filtersTriggerAction(fn($action) => $action->button()->label('Filters'))
             ->columns([
                 Tables\Columns\TextColumn::make('title')
                     ->searchable()
@@ -76,7 +77,18 @@ class TalkResource extends Resource
 
             ])
             ->filters([
-                //
+                Tables\Filters\TernaryFilter::make('new_talk'),
+                Tables\Filters\SelectFilter::make('speaker')
+                    ->relationship('speaker', 'name')
+                    ->multiple()
+                    ->searchable()
+                    ->preload(),
+                Tables\Filters\Filter::make('has_avatar')
+                    ->query(function ($query) {
+                        return $query->whereHas('speaker',function (Builder $q) {
+                            $q->whereNotNull('avatar');
+                        });
+                    })->toggle(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
