@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\TalkLength;
 use App\Filament\Resources\TalkResource\Pages;
 use App\Filament\Resources\TalkResource\RelationManagers;
 use App\Models\Talk;
@@ -12,6 +13,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Str;
 
 class TalkResource extends Resource
 {
@@ -39,10 +41,30 @@ class TalkResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable()
+                    ->description(fn ($record) => Str::limit($record->abstract , 30 )),
+
+                Tables\Columns\ImageColumn::make('speaker.avatar')
+                    ->label('Speaker Avatar')
+                    ->circular()
+                    ->defaultImageUrl(function ($record) {
+                        return 'https://ui-avatars.com/api/?background=8A2BE2&color=fff&name=' . urlencode($record->speaker->name);
+                    }),
                 Tables\Columns\TextColumn::make('speaker.name')
-                    ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\ToggleColumn::make('new_talk'),
+                Tables\Columns\TextColumn::make('status')
+                    ->badge()
+                    ->sortable()
+                    ->color(function ($state) {
+                        return $state->getColor();
+                    }),
+
+                Tables\Columns\IconColumn::make('length')
+                    ->icon(fn ($state) => $state->getIcon()),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -51,6 +73,7 @@ class TalkResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+
             ])
             ->filters([
                 //
