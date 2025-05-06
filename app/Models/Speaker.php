@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\TextInput;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -19,6 +20,7 @@ class Speaker extends Model
         'first-time' => 'First Time',
         'open-source' => 'Open Source',
     ];
+
     protected $guarded = ['id'];
     protected  $casts = [
             'id' => 'integer',
@@ -48,6 +50,7 @@ class Speaker extends Model
                 ->avatar()
                 ->directory('avatars' )
                 ->maxSize(1024 * 1024 * 2),
+            RichEditor::make('bio'),
             CheckboxList::make('qualifications')
                 ->options([
                     'business' => 'Business',
