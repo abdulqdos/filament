@@ -16,11 +16,13 @@ use Filament\Support\Facades\FilamentView;
 use Filament\Widgets;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
+use Illuminate\Foundation\Console\EnvironmentCommand;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use pxlrbt\FilamentEnvironmentIndicator\EnvironmentIndicatorPlugin;
 
 class AppPanelProvider extends PanelProvider
 {
@@ -67,6 +69,13 @@ class AppPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])->plugins([
+                EnvironmentIndicatorPlugin::make()
+                ->color(fn () => match (app()->environment()) {
+                   'production' => null,
+                   'staging' => Color::Orange,
+                   default => Color::Violet,
+                }),
             ]);
     }
 
