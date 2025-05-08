@@ -7,6 +7,7 @@ use App\Filament\Resources\AttendeeResource\RelationManagers;
 use App\Filament\Resources\AttendeeResource\Widgets\AttendeeChartWidget;
 use App\Filament\Resources\AttendeeResource\Widgets\AttendeeStatsWidget;
 use App\Models\Attendee;
+use Blueprint\Models\Model;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -14,13 +15,16 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use PhpParser\Node\Expr\AssignOp\Mod;
 
 class AttendeeResource extends Resource
 {
     protected static ?string $model = Attendee::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $recordTitleAttribute = 'name' ;
+//    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    protected static ?string $navigationGroup = 'First Group';
     public static function form(Form $form): Form
     {
         return $form
@@ -85,6 +89,18 @@ class AttendeeResource extends Resource
             //
         ];
     }
+
+    public static function getNavigationBadge(): string
+    {
+        return 'New';
+    }
+
+   public static function getGlobalSearchResultDetails(\Illuminate\Database\Eloquent\Model $record): array
+   {
+       return [
+          'conference' => $record->conference->name,
+       ];
+   }
 
     public static function getWidgets(): array
     {
